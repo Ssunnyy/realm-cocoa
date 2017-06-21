@@ -23,6 +23,7 @@
 #import <Realm/RLMResults.h>
 
 #import <realm/link_view_fwd.hpp>
+#import <realm/table_ref.hpp>
 
 namespace realm {
     class Results;
