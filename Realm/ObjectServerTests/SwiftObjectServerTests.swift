@@ -295,14 +295,14 @@ class SwiftObjectServerTests: SwiftSyncTestCase {
 
         // Look up information about the non-admin user from the admin user.
         let ex = expectation(description: "Should be able to look up user information")
-        adminUser.retrieveUserInfo(forProvider: .usernamePassword, providerIdentity: nonAdminUsername) { (userInfo, err) in
+        adminUser.retrieveInfo(forUser: nonAdminUsername, identityProvider: .usernamePassword) { (userInfo, err) in
             XCTAssertNil(err)
             XCTAssertNotNil(userInfo)
             guard let userInfo = userInfo else {
                 return
             }
             XCTAssertEqual(userInfo.provider, .usernamePassword)
-            XCTAssertEqual(userInfo.providerID, nonAdminUsername)
+            XCTAssertEqual(userInfo.username, nonAdminUsername)
             XCTAssertFalse(userInfo.isAdmin)
             ex.fulfill()
         }

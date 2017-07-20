@@ -407,58 +407,58 @@
 
     // Get the non-admin user's info.
     XCTestExpectation *ex1 = [self expectationWithDescription:@"should be able to get info about non-admin user"];
-    [userDoingLookups retrieveUserInfoForProvider:RLMIdentityProviderUsernamePassword
-                                 providerIdentity:nonAdminUsername
-                                       completion:^(RLMSyncUserInfo *info, NSError *err) {
-                                           XCTAssertNil(err);
-                                           XCTAssertNotNil(info);
-                                           XCTAssertEqualObjects(info.provider, RLMIdentityProviderUsernamePassword);
-                                           XCTAssertEqualObjects(info.providerID, nonAdminUsername);
-                                           XCTAssertFalse(info.isAdmin);
-                                           [ex1 fulfill];
-                                       }];
+    [userDoingLookups retrieveInfoForUser:nonAdminUsername
+                         identityProvider:RLMIdentityProviderUsernamePassword
+                               completion:^(RLMSyncUserInfo *info, NSError *err) {
+                                   XCTAssertNil(err);
+                                   XCTAssertNotNil(info);
+                                   XCTAssertEqualObjects(info.provider, RLMIdentityProviderUsernamePassword);
+                                   XCTAssertEqualObjects(info.username, nonAdminUsername);
+                                   XCTAssertFalse(info.isAdmin);
+                                   [ex1 fulfill];
+                               }];
     [self waitForExpectationsWithTimeout:10 handler:nil];
 
     // Get the admin user's info.
     XCTestExpectation *ex2 = [self expectationWithDescription:@"should be able to get info about admin user"];
-    [userDoingLookups retrieveUserInfoForProvider:RLMIdentityProviderUsernamePassword
-                                 providerIdentity:adminUsername
-                                       completion:^(RLMSyncUserInfo *info, NSError *err) {
-                                           XCTAssertNil(err);
-                                           XCTAssertNotNil(info);
-                                           XCTAssertEqualObjects(info.provider, RLMIdentityProviderUsernamePassword);
-                                           XCTAssertEqualObjects(info.providerID, adminUsername);
-                                           XCTAssertTrue(info.isAdmin);
-                                           [ex2 fulfill];
-                                       }];
+    [userDoingLookups retrieveInfoForUser:adminUsername
+                         identityProvider:RLMIdentityProviderUsernamePassword
+                               completion:^(RLMSyncUserInfo *info, NSError *err) {
+                                   XCTAssertNil(err);
+                                   XCTAssertNotNil(info);
+                                   XCTAssertEqualObjects(info.provider, RLMIdentityProviderUsernamePassword);
+                                   XCTAssertEqualObjects(info.username, adminUsername);
+                                   XCTAssertTrue(info.isAdmin);
+                                   [ex2 fulfill];
+                               }];
     [self waitForExpectationsWithTimeout:10 handler:nil];
 
     // Get invalid user's info.
     XCTestExpectation *ex3 = [self expectationWithDescription:@"should fail for non-existent user"];
-    [userDoingLookups retrieveUserInfoForProvider:RLMIdentityProviderUsernamePassword
-                                 providerIdentity:@"invalid_user@realm.example.org"
-                                       completion:^(RLMSyncUserInfo *info, NSError *err) {
-                                           XCTAssertNotNil(err);
-                                           XCTAssertEqualObjects(err.domain, RLMSyncAuthErrorDomain);
-                                           XCTAssertEqual(err.code, RLMSyncAuthErrorHTTPStatusCodeError);
-                                           XCTAssertEqualObjects([err.userInfo objectForKey:@"statusCode"], @404);
-                                           XCTAssertNil(info);
-                                           [ex3 fulfill];
-                                       }];
+    [userDoingLookups retrieveInfoForUser:@"invalid_user@realm.example.org"
+                         identityProvider:RLMIdentityProviderUsernamePassword
+                               completion:^(RLMSyncUserInfo *info, NSError *err) {
+                                   XCTAssertNotNil(err);
+                                   XCTAssertEqualObjects(err.domain, RLMSyncAuthErrorDomain);
+                                   XCTAssertEqual(err.code, RLMSyncAuthErrorHTTPStatusCodeError);
+                                   XCTAssertEqualObjects([err.userInfo objectForKey:@"statusCode"], @404);
+                                   XCTAssertNil(info);
+                                   [ex3 fulfill];
+                               }];
     [self waitForExpectationsWithTimeout:10 handler:nil];
 
     // Get info using user without admin privileges.
     XCTestExpectation *ex4 = [self expectationWithDescription:@"should fail for user without admin privileges"];
-    [nonAdminUser retrieveUserInfoForProvider:RLMIdentityProviderUsernamePassword
-                             providerIdentity:adminUsername
-                                   completion:^(RLMSyncUserInfo *info, NSError *err) {
-                                       XCTAssertNotNil(err);
-                                       XCTAssertEqualObjects(err.domain, RLMSyncAuthErrorDomain);
-                                       XCTAssertEqual(err.code, RLMSyncAuthErrorHTTPStatusCodeError);
-                                       XCTAssertEqualObjects([err.userInfo objectForKey:@"statusCode"], @401);
-                                       XCTAssertNil(info);
-                                       [ex4 fulfill];
-                                   }];
+    [nonAdminUser retrieveInfoForUser:adminUsername
+                     identityProvider:RLMIdentityProviderUsernamePassword
+                           completion:^(RLMSyncUserInfo *info, NSError *err) {
+                               XCTAssertNotNil(err);
+                               XCTAssertEqualObjects(err.domain, RLMSyncAuthErrorDomain);
+                               XCTAssertEqual(err.code, RLMSyncAuthErrorHTTPStatusCodeError);
+                               XCTAssertEqualObjects([err.userInfo objectForKey:@"statusCode"], @401);
+                               XCTAssertNil(info);
+                               [ex4 fulfill];
+                           }];
     [self waitForExpectationsWithTimeout:10 handler:nil];
 }
 

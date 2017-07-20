@@ -79,7 +79,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface RLMUserResponseModel : NSObject RLM_SYNC_UNINITIALIZABLE
 
 @property (nonatomic, readonly) NSString *provider;
-@property (nonatomic, readonly) NSString *providerID;
+@property (nonatomic, readonly) NSString *username;
 @property (nonatomic, readonly) NSString *identity;
 @property (nonatomic, readonly) BOOL isAdmin;
 

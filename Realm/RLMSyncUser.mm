@@ -113,7 +113,7 @@ PermissionChangeCallback RLMWrapPermissionStatusCallback(RLMPermissionStatusBloc
 @interface RLMSyncUserInfo ()
 
 @property (nonatomic, readwrite) RLMIdentityProvider provider;
-@property (nonatomic, readwrite) NSString *providerID;
+@property (nonatomic, readwrite) NSString *username;
 @property (nonatomic, readwrite) NSString *identity;
 @property (nonatomic, readwrite) BOOL isAdmin;
 
@@ -301,14 +301,14 @@ PermissionChangeCallback RLMWrapPermissionStatusCallback(RLMPermissionStatusBloc
 
 #pragma mark - Administrator API
 
-- (void)retrieveUserInfoForProvider:(RLMIdentityProvider)provider
-                   providerIdentity:(NSString *)providerID
-                         completion:(RLMRetrieveUserBlock)completion {
+- (void)retrieveInfoForUser:(NSString *)username
+           identityProvider:(RLMIdentityProvider)provider
+                 completion:(RLMRetrieveUserBlock)completion {
     [RLMNetworkClient sendRequestToEndpoint:[RLMSyncGetUserInfoEndpoint endpoint]
                                      server:self.authenticationServer
                                        JSON:@{
                                               kRLMSyncProviderKey: provider,
-                                              kRLMSyncProviderIDKey: providerID,
+                                              kRLMSyncProviderIDKey: username,
                                               kRLMSyncTokenKey: self._refreshToken
                                               }
                                  completion:^(NSError *error, NSDictionary *json) {
@@ -464,7 +464,7 @@ PermissionChangeCallback RLMWrapPermissionStatusCallback(RLMPermissionStatusBloc
 + (instancetype)syncUserInfoWithModel:(RLMUserResponseModel *)model {
     RLMSyncUserInfo *info = [[RLMSyncUserInfo alloc] initPrivate];
     info.provider = model.provider;
-    info.providerID = model.providerID;
+    info.username = model.username;
     info.isAdmin = model.isAdmin;
     info.identity = model.identity;
     return info;

@@ -147,7 +147,7 @@ static const NSString *const kRLMSyncUserKey            = @"user";
 @interface RLMUserResponseModel ()
 
 @property (nonatomic, readwrite) NSString *provider;
-@property (nonatomic, readwrite) NSString *providerID;
+@property (nonatomic, readwrite) NSString *username;
 @property (nonatomic) RLMUserResponseUserModel *submodel;
 @property (nonatomic, readwrite) NSString *identity;
 @property (nonatomic, readwrite) BOOL isAdmin;
@@ -159,7 +159,7 @@ static const NSString *const kRLMSyncUserKey            = @"user";
 - (instancetype)initWithDictionary:(NSDictionary *)jsonDictionary {
     if (self = [super init]) {
         RLM_SYNC_PARSE_STRING_OR_ABORT(jsonDictionary, kRLMSyncProviderKey, provider);
-        RLM_SYNC_PARSE_STRING_OR_ABORT(jsonDictionary, kRLMSyncProviderIDKey, providerID);
+        RLM_SYNC_PARSE_STRING_OR_ABORT(jsonDictionary, kRLMSyncProviderIDKey, username);
         RLM_SYNC_PARSE_MODEL_OR_ABORT(jsonDictionary, kRLMSyncUserKey, RLMUserResponseUserModel, submodel);
         return self;
     }

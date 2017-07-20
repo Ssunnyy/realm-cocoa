@@ -185,15 +185,16 @@ NS_SWIFT_UNAVAILABLE("Use the full version of this API.");
  Given a Realm Object Server authentication provider and a provider identifier for a user
  (for example, a username), look up and return user information for that user.
 
+ @param username    The username or identity of the user as issued by the authentication provider.
+                    In most cases this is different from the Realm Object Server-issued identity.
  @param provider    The authentication provider that manages the user whose information is desired.
- @param providerID  The identity of the user as issued by the authentication provider.
  @param completion  Completion block invoked when request has completed or failed.
                     The callback will be invoked on a background queue provided
                     by `NSURLSession`.
  */
-- (void)retrieveUserInfoForProvider:(RLMIdentityProvider)provider
-                   providerIdentity:(NSString *)providerID
-                         completion:(RLMRetrieveUserBlock)completion;
+- (void)retrieveInfoForUser:(NSString *)username
+           identityProvider:(RLMIdentityProvider)provider
+                 completion:(RLMRetrieveUserBlock)completion;
 
 // This set of permissions APIs uses immutable `RLMSyncPermissionValue` objects to
 // retrieve and apply permissions. It is intended to replace the set of APIs which
@@ -280,12 +281,12 @@ NS_SWIFT_UNAVAILABLE("Use the full version of this API.");
 @property (nonatomic, readonly) RLMIdentityProvider provider;
 
 /**
- The provider-based username of the user.
+ The username or identity issued to this user by the authentication provider.
  */
-@property (nonatomic, readonly) NSString *providerID;
+@property (nonatomic, readonly) NSString *username;
 
 /**
- The internal Realm Object Server identity of the user.
+ The identity issued to this user by the Realm Object Server.
  */
 @property (nonatomic, readonly) NSString *identity;
 
